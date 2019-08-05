@@ -1,10 +1,10 @@
 package perceptron;
 
-public class Num_node implements Comparable<Num_node>{
+public class Perceptron_node implements Comparable<Perceptron_node>{
 	private double chance; //chance of being a certain number
 	private int label; //number it has a chance of being
 	
-	public Num_node(double chance, int label) {
+	public Perceptron_node(double chance, int label) {
 		this.chance = chance;
 		this.label = label;
 	}
@@ -24,7 +24,7 @@ public class Num_node implements Comparable<Num_node>{
 	 */
 	
 	@Override
-	public int compareTo(Num_node o) {
+	public int compareTo(Perceptron_node o) {
 		double sort = this.chance - o.chance;
 		if(sort > 0) {
 			return 1;
