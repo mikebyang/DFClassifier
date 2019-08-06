@@ -1,5 +1,9 @@
 package parser;
 
+import java.util.Arrays;
+import java.util.Random;
+import java.util.ArrayList;
+
 public class Data_obj {
 	//image from data file
 	private String [] image;
@@ -7,10 +11,14 @@ public class Data_obj {
 	//for numbers -> will be the numerical value of the image
 	private int label;
 	private int Cells;
+	private int width;
+	private int height;
 	
 	public Data_obj(int label, String [] image) {
 		this.label = label;
 		this.image = image;
+		this.width = image[0].length();
+		this.height = image.length;
 	}
 	
 	public Data_obj(int label, String [] image, int Cells) {
@@ -19,6 +27,40 @@ public class Data_obj {
 		this.Cells = Cells;
 	}
 	
+	
+	public void modHeight(int hmod, int extra, int maxw) {
+		ArrayList<String> arr =new ArrayList<>(Arrays.asList(this.image));
+		String wspace = String.format("%1$"+maxw+"s", " ");
+		Random rand = new Random();
+		if(extra != 0) {
+			if(rand.nextBoolean()) {
+				arr.add(0, wspace);
+			}
+			else {
+				arr.ensureCapacity(arr.size()+1);
+				arr.add(arr.size(), wspace);
+			}
+		}
+		
+		for(int i = 0; i < hmod; i++) {
+			arr.add(0, wspace);
+			arr.ensureCapacity(arr.size()+1);
+			arr.add(arr.size(), wspace);
+		}
+		this.image = arr.toArray(new String[arr.size()]);
+	}
+	public void modWidth(int wmod, int extra, int maxw) {
+		ArrayList<String> arr =new ArrayList<>(Arrays.asList(this.image));
+		String wspace = " ";
+		for(int i = 0; i < arr.size(); i++) {
+			arr.set(i, wspace + arr.get(i) + wspace);
+		}
+		Random rand = new Random();
+		if(extra != 0) {
+			
+		}
+		this.image = arr.toArray(new String[arr.size()]);
+	}
 	public String [] getData() {
 		return this.image;
 	}
@@ -27,5 +69,11 @@ public class Data_obj {
 	}
 	public int getCells() {
 		return this.Cells;
+	}
+	public int getWidth() {
+		return this.width;
+	}
+	public int getHeight() {
+		return this.height;
 	}
 }

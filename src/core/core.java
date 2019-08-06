@@ -72,6 +72,7 @@ public class core {
 			catch(Exception e) {
 				System.out.println("An Unknown Error Occurred.");
 				e.printStackTrace();
+				sc.close();
 				return;
 			}
 		}
@@ -83,12 +84,26 @@ public class core {
 				//Naive Bayes
 			case 1:
 				//Perceptron
+				String imgFile = "", labFile = "";
+				switch(classifier_type) {
+					case 0:
+						imgFile = "trainingimages";
+						labFile = "traininglabels";
+						break;
+					case 1:
+						imgFile = "facedatatrain";
+						labFile = "facedatatrainlabels";
+				}
+				
+				List<Data_obj> training_nodes = null;
+				
 				try {
-					Parser.trainParse(classifier_type, "trainingimages", "traininglabels");
+					training_nodes = Parser.trainParse(classifier_type, imgFile, labFile, 0);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
+					return;
 				}
-				List<Data_obj> training_nodes = Parser.getData();
+				
 				switch(classifier_type) {
 					case 0://digits
 						Num_Classifier.num_train(training_nodes, train_per, lRate);
