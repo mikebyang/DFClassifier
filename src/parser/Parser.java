@@ -28,34 +28,41 @@ public class Parser {
 	public static int cell_counter(String str) {//count number of non-whitespace characters
 		return str.replace(" ", "").length();
 	}
-	private static boolean isOdd(int num) {
-		if(num%2 == 0) {
-			return false;
-		}
-		return true;
+	private static int[] isOdd(int num) {
+		int [] ans = new int[2];
+		
+		ans[0] = num%2;
+		ans[1] = (num-ans[0])/2;
+		
+		return ans;
+		
 	}
-	public static List<Data_obj>  normalize(Data_obj[] data) {
+	public static ArrayList<Data_obj>  normalize(Data_obj[] data) {
 		/*
 		 * @param data -> object array which contains objects with image fields to be normalized using the static variable maxw as the largest width
 		 * and maxh as the largest height
 		 * @return Data_obj array with normalized image fields
 		 */
-		int dif = 0, hmod = 0, wmod = 0;
+		int dif = 0;
+		int[] ans;
 		for(int i = 0; i < data.length; i++) {
 			if(data[i].getHeight() < maxh) {
 				dif = maxh - data[i].getHeight();
-				
+				ans = isOdd(dif);
+				data[i].modHeight(ans[1], ans[0], maxw, maxh);
 			}
 			if(data[i].getWidth() < maxw) {
 				dif = maxh - data[i].getWidth();
+				ans = isOdd(dif);
+				data[i].modWidth(ans[1], ans[0], maxh, maxw);
 			}
 		}
-		return Arrays.asList(data);
+		return new ArrayList<>(Arrays.asList(data));
 	}
 	
 	
 	//parse img or labels files and input into object fields then store created objects into an array
-	public static List<Data_obj> trainParse(int classification, String dat_fil, String lab_fil, int mode) throws FileNotFoundException {
+	public static ArrayList<Data_obj> trainParse(int classification, String dat_fil, String lab_fil, int mode) throws FileNotFoundException {
 		/*
 		 * @param classification -> input to tell parser what type of image classification is to occur (0 means digit and 1 means face)
 		 * @param dat_fil, lab_fil -> files that are to be parsed. dat_fil is the image file and lab_fil is the corresponding label file.
@@ -64,7 +71,7 @@ public class Parser {
 		 */
 		
 		//Array with all the training data objects
-		List<Data_obj> data = new ArrayList<Data_obj>();
+		ArrayList<Data_obj> data = new ArrayList<Data_obj>();
 		String training_fil = "";
 		String training_lfil = "";
 		switch(classification) {
@@ -86,46 +93,50 @@ public class Parser {
 		String img_part = "";
 		List<String> img_temp = new ArrayList<String>();
 		
-		switch(mode) {
-			case 0:
-				while(dsc.hasNext() && lsc.hasNext()) {
-					if(isBlank(img_part = dsc.nextLine()) && img_temp.isEmpty()) {
-						continue;
-					}
-					else if(isBlank(img_part) && !img_temp.isEmpty()) {
-						data.add(new Data_obj(Integer.parseInt(lsc.nextLine()), img_temp.toArray(new String[img_temp.size()])));
-						maxh = img_temp.size();
-						img_temp = new ArrayList<>();
-						continue;
-					}
-					else {
-						img_temp.add(img_part);
-						maxw = img_part.length();
-						continue;
-					}
+//		switch(mode) {
+//			case 0:
+		while(dsc.hasNext() && lsc.hasNext()) {
+			if(isBlank(img_part = dsc.nextLine()) && img_temp.isEmpty()) {
+				continue;
+			}
+			else if(isBlank(img_part) && !img_temp.isEmpty()) {
+				data.add(new Data_obj(Integer.parseInt(lsc.nextLine()), img_temp.toArray(new String[img_temp.size()])));
+				if(mode == 0) {
+					maxh = img_temp.size();
 				}
-				data = normalize(data.toArray(new Data_obj[data.size()]));
-				break;
-			case 1:
-				int cells = 0;
-				while(dsc.hasNext() && lsc.hasNext()) {
-					if(isBlank(img_part = dsc.nextLine()) && img_temp.isEmpty()) {
-						continue;
-					}
-					else if(isBlank(img_part) && !img_temp.isEmpty()) {
-						data.add(new Data_obj(Integer.parseInt(lsc.nextLine()), img_temp.toArray(new String[img_temp.size()]), cells));
-						cells = 0;
-						img_temp = new ArrayList<>();
-						continue;
-					}
-					else {
-						img_temp.add(img_part);
-						cells += cell_counter(img_part);
-						continue;
-					}
+				img_temp = new ArrayList<>();
+				continue;
+			}
+			else {
+				img_temp.add(img_part);
+				if(mode == 0) {
+					maxw = img_part.length();
 				}
-				break;
+				continue;
+			}
 		}
+		data = normalize(data.toArray(new Data_obj[data.size()]));
+//				break;
+//			case 1:
+////				int cells = 0;
+//				while(dsc.hasNext() && lsc.hasNext()) {
+//					if(isBlank(img_part = dsc.nextLine()) && img_temp.isEmpty()) {
+//						continue;
+//					}
+//					else if(isBlank(img_part) && !img_temp.isEmpty()) {
+//						data.add(new Data_obj(Integer.parseInt(lsc.nextLine()), img_temp.toArray(new String[img_temp.size()])));
+////						cells = 0;
+//						img_temp = new ArrayList<>();
+//						continue;
+//					}
+//					else {
+//						img_temp.add(img_part);
+////						cells += cell_counter(img_part);
+//						continue;
+//					}
+//				}
+//				break;
+//		}
 		
 		dsc.close();
 		lsc.close();

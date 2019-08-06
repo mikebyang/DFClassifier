@@ -5,8 +5,9 @@ import java.util.List;
 
 public class Perceptron_node {
 	private Double[][] arr;
+	private Double total = 0.0;
 	
-	private Double[][] conv(String [] sarr){
+	public static Double[][] conv(String [] sarr){
 		List<Double[]> outer = new ArrayList<Double[]>();
 		List<Double> inner = new ArrayList<Double>();
 		for(int i = 0; i < sarr.length; i++) {
@@ -33,10 +34,10 @@ public class Perceptron_node {
 		for(int i = 0; i < a.length; i++) {
 			for(int j = 0; j < a[i].length(); j++) {
 				if(a[i].charAt(j) == ' ') {
-					System.out.println("strh" + a.length);
-					System.out.println("strw" + a[i].length());
-					System.out.println("doubleh" + this.arr.length);
-					System.out.println("doublew" + this.arr[i].length);
+//					System.out.println("strh" + a.length);
+//					System.out.println("strw" + a[i].length());
+//					System.out.println("doubleh" + this.arr.length);
+//					System.out.println("doublew" + this.arr[i].length);
 					this.arr[i][j] += 0.0;
 				}
 				else if(a[i].charAt(j) == '+') {
@@ -58,5 +59,14 @@ public class Perceptron_node {
 	public Perceptron_node(String[] sarr) {
 		this.arr = conv(sarr);
 	}
-	
+	public void setTot() {
+		for(int i = 0; i < this.arr.length; i++) {
+			for(int j = 0; j < this.arr[i].length; j++) {
+				this.total += this.arr[i][j];
+			}
+		}
+	}
+	public Double getTot() {
+		return this.total;
+	}
 }

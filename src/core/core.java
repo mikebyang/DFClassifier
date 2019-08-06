@@ -5,14 +5,15 @@ import parser.Parser;
 import perceptron.Num_Classifier;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+//import java.util.List;
 import java.util.Scanner;
 
 public class core {
 	public static void main(String[] args) {
 		int algo = -1, classifier_type= -1;
 		double train_per = -1,  lRate = -1;
-		String prev_sess = "";
+//		String prev_sess = "";
 //				filename = "";
 		
 		//get inputs from user for the current session
@@ -21,15 +22,15 @@ public class core {
 //		boolean new_sess = true;
 		while(true) {
 			try {
-				System.out.print("Proceed with new session? ");
-				String ans = sc.nextLine();
-				switch(ans.toLowerCase()) {
-					case "no": //using information from an old session
-						System.out.print("Please input the file name for the previous session:  ");
-						prev_sess = sc.nextLine();
-						
-						break;
-					case "yes": //new session
+//				System.out.print("Proceed with new session? ");
+//				String ans = sc.nextLine();
+//				switch(ans.toLowerCase()) {
+//					case "no": //using information from an old session
+//						System.out.print("Please input the file name for the previous session:  ");
+//						prev_sess = sc.nextLine();
+//						
+//						break;
+//					case "yes": //new session
 //						System.out.print("Please input name of training file: ");
 //						filename = sc.nextLine();
 						
@@ -60,8 +61,8 @@ public class core {
 						if(classifier_type > 1 || classifier_type < 0) {
 							throw new IOException();
 						}
-						break;
-				}
+//						break;
+//				}
 				break;
 			}
 			catch(IOException ioe){
@@ -95,7 +96,7 @@ public class core {
 						labFile = "facedatatrainlabels";
 				}
 				
-				List<Data_obj> training_nodes = null;
+				ArrayList<Data_obj> training_nodes = null;
 				
 				try {
 					training_nodes = Parser.trainParse(classifier_type, imgFile, labFile, 0);

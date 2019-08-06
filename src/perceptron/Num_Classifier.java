@@ -10,7 +10,7 @@ import parser.Data_obj;
 public class Num_Classifier {
 	private static List<Perceptron_node> num_arr = new ArrayList<Perceptron_node>(10);
 	
-	public static void num_train(List<Data_obj> data_arr, double train_per, double lRate) {
+	public static void num_train(ArrayList<Data_obj> data_arr, double train_per, double lRate) {
 		int train_size = (int) (data_arr.size() * train_per/100);
 		Random rand = new Random();
 		int rdm_index = -1;
@@ -29,6 +29,7 @@ public class Num_Classifier {
 			else {
 				try {
 					temp_arr[t_node.getLabel()].mod(t_node.getData(), lRate);
+					temp_arr[t_node.getLabel()].setTot();
 				}
 				catch(Exception e) {
 					e.printStackTrace();
