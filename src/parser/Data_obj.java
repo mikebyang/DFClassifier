@@ -8,6 +8,11 @@ public class Data_obj {
 	private int label;
 	private int Cells;
 	
+	public Data_obj(int label, String [] image) {
+		this.label = label;
+		this.image = image;
+	}
+	
 	public Data_obj(int label, String [] image, int Cells) {
 		this.label = label;
 		this.image = image;

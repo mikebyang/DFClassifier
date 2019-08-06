@@ -2,17 +2,23 @@ package core;
 
 import parser.Data_obj;
 import parser.Parser;
+import perceptron.Num_Classifier;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class core {
 	public static void main(String[] args) {
-		int train_per = -1, algo = -1, classifier_type= -1, lRate = -1;
-		String prev_sess = "", filename = "";
+		int algo = -1, classifier_type= -1;
+		double train_per = -1,  lRate = -1;
+		String prev_sess = "";
+//				filename = "";
+		
 		//get inputs from user for the current session
 		Scanner sc = new Scanner(System.in);
-		boolean new_sess = true;
+		
+//		boolean new_sess = true;
 		while(true) {
 			try {
 				System.out.print("Proceed with new session? ");
@@ -27,15 +33,16 @@ public class core {
 //						System.out.print("Please input name of training file: ");
 //						filename = sc.nextLine();
 						
-						System.out.print("Please input percentage of training data to be used: ");
+						System.out.println("Please input percentage of training data to be used (XXX%)");
+						System.out.print("(MAX: 100%, MIN: 0%) : ");
 						train_per = sc.nextInt();
 						if(train_per > 100 || train_per < 0) {
 							throw new IOException();
 						}
 						
-						System.out.print("Please input percentage of training data to be used: ");
-						lRate = sc.nextInt();
-						if(lRate > 100 || lRate < 0) {
+						System.out.print("Please input learning rate (MAX: 1, MIN: Greater Than 0): ");
+						lRate = sc.nextDouble();
+						if(lRate > 1 || lRate <= 0) {
 							throw new IOException();
 						}
 
@@ -77,11 +84,18 @@ public class core {
 			case 1:
 				//Perceptron
 				try {
-					Parser.trainParse(classifier_type);
+					Parser.trainParse(classifier_type, "trainingimages", "traininglabels");
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				Data_obj[] training_nodes = Parser.getData();
+				List<Data_obj> training_nodes = Parser.getData();
+				switch(classifier_type) {
+					case 0://digits
+						Num_Classifier.num_train(training_nodes, train_per, lRate);
+						break;
+					case 1://faces
+						break;
+				}
 				
 		}
 		

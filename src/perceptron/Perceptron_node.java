@@ -1,40 +1,62 @@
 package perceptron;
 
-public class Perceptron_node implements Comparable<Perceptron_node>{
-	private double chance; //chance of being a certain number
-	private int label; //number it has a chance of being
-	
-	public Perceptron_node(double chance, int label) {
-		this.chance = chance;
-		this.label = label;
-	}
-	
-	public double getChance() {
-		return this.chance;
-	}
-	
-	public int getLabel() {
-		return this.label;
-	}
+import java.util.ArrayList;
+import java.util.List;
 
-	/**
-	 * @param
-	 * @return Negative, zero, or positive if this chance is 
-	 * less than, equal to, or greater than supplied chance
-	 */
+public class Perceptron_node {
+	private Double[][] arr;
 	
-	@Override
-	public int compareTo(Perceptron_node o) {
-		double sort = this.chance - o.chance;
-		if(sort > 0) {
-			return 1;
+	private Double[][] conv(String [] sarr){
+		List<Double[]> outer = new ArrayList<Double[]>();
+		List<Double> inner = new ArrayList<Double>();
+		for(int i = 0; i < sarr.length; i++) {
+			for(int j = 0; j < sarr[0].length(); j++) {
+				if(sarr[i].charAt(j) == ' ') {
+					inner.add(0.0);
+				}
+				else if(sarr[i].charAt(j) == '+') {
+					inner.add(0.5);
+				}
+				else if(sarr[i].charAt(j) == '#') {
+					inner.add(1.0);
+				}
+			}
+			outer.add(inner.toArray(new Double[inner.size()]));
+			inner = new ArrayList<Double>();
 		}
-		else if(sort < 0) {
-			return -1;
+		
+		return outer.toArray(new Double[outer.size()][sarr[0].length()]);
+	}
+	
+	public void mod(String [] a, double lRate) {
+		try {
+		for(int i = 0; i < a.length; i++) {
+			for(int j = 0; j < a[i].length(); j++) {
+				if(a[i].charAt(j) == ' ') {
+					System.out.println("strh" + a.length);
+					System.out.println("strw" + a[i].length());
+					System.out.println("doubleh" + this.arr.length);
+					System.out.println("doublew" + this.arr[i].length);
+					this.arr[i][j] += 0.0;
+				}
+				else if(a[i].charAt(j) == '+') {
+					this.arr[i][j] += 0.5*lRate;
+				}
+				else if(a[i].charAt(j) == '#') {
+					this.arr[i][j] += 1.0*lRate;
+				}
+			}
 		}
-		else {
-			return 0;
 		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.print(this.arr.length);
+			System.exit(1);
+		}
+	}
+	
+	public Perceptron_node(String[] sarr) {
+		this.arr = conv(sarr);
 	}
 	
 }
