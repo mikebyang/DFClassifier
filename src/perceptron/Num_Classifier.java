@@ -39,4 +39,5 @@ public class Num_Classifier {
 		//convert back to list
 		num_arr = new ArrayList<Perceptron_node>(Arrays.asList(temp_arr));
 	}
+	
 }
