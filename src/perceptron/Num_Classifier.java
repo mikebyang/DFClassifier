@@ -32,13 +32,13 @@ public class Num_Classifier {
 			else {
 				try {
 					temp_arr[t_node.getLabel()].mod(t_node.getData(), lRate);
-					temp_arr[t_node.getLabel()].setTot();
 				}
 				catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+		
 		//convert back to list
 		num_arr = new ArrayList<Perceptron_node>(Arrays.asList(temp_arr));
 	}
@@ -46,25 +46,40 @@ public class Num_Classifier {
 	private static double matmul(Double [][] mat1,Double [][] mat2, Double tot) {
 		double total = 0.0;
 		if(mat1.length != mat2.length) {
+			System.out.print(1);
 			System.exit(1);
 		}
-		
+		Double amt = 0.0;
 		for(int i = 0; i < mat1.length; i++) {
 			for(int j = 0; j < mat1[0].length; j++) {
+				if(mat1[i][j] * mat2[i][j] != 0) {
+					amt++;
+				}
 				total += (mat1[i][j] * mat2[i][j]);
 			}
 		}
 		
 		return total/tot;
 	}
-	public static int classify(String [] image) {
+	public static int classify(String [] image, double lRate) {
 		Double [][] img = Perceptron_node.conv(image, 1);
 		List<Chance_node> t_arr = new ArrayList<Chance_node>(10);
 		for(int i = 0; i < num_arr.size(); i++) {
 			t_arr.add(
 					new Chance_node(
-							matmul(img, num_arr.get(i).getDat(), num_arr.get(i).getTot()), i));
+							matmul(img, num_arr.get(i).getDat(), Perceptron_node.setTot(img)), i));
 		}
 		return Collections.max(t_arr).getLabel();
+	}
+	public static void val_check(ArrayList<Data_obj> data_arr, double lRate) {
+		int guess = -1;
+		Perceptron_node [] temp_arr = num_arr.toArray(new Perceptron_node[10]);
+		for(int i = 0; i<data_arr.size(); i++) {
+			guess = classify(data_arr.get(i).getData(), lRate);
+			if(guess != data_arr.get(i).getLabel()) {
+				temp_arr[guess].adj(Perceptron_node.conv(data_arr.get(i).getData(),1),lRate);
+			}
+		}
+		num_arr = new ArrayList<Perceptron_node>(Arrays.asList(temp_arr));
 	}
 }

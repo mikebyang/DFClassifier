@@ -2,9 +2,10 @@ package core;
 
 import parser.Data_obj;
 import parser.Parser;
+import parser.Parser2;
+import perceptron.Face_Classifier;
 import perceptron.Num_Classifier;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,29 +100,42 @@ public class core {
 				}
 				
 				ArrayList<Data_obj> training_nodes = null;
+				ArrayList<Data_obj> val_nodes = null;
 				
-				try {
-					training_nodes = Parser.trainParse(classifier_type, imgFile, labFile, 0);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					return;
-				}
 				double corr = 0.0;
 				double tots = 0.0;
 				int guess = -1;
 				
 				switch(classifier_type) {
 					case 0://digits
-						Num_Classifier.num_train(training_nodes, train_per, lRate);
-						ArrayList<Data_obj> class_nodes = null;
 						try {
-							 class_nodes = Parser.trainParse(classifier_type, "testimages", "testlabels", 0);
+							training_nodes = Parser.trainParse(classifier_type, imgFile, labFile, 0);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+							return;
+						}
+						
+						Num_Classifier.num_train(training_nodes, train_per, lRate);
+						
+						try {
+							val_nodes = Parser.trainParse(classifier_type, "validationimages", "validationlabels", 1);
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+							return;
+						}
+						
+						Num_Classifier.val_check(val_nodes, lRate);
+						
+						ArrayList<Data_obj> class_nodes = null;
+						
+						try {
+							 class_nodes = Parser.trainParse(classifier_type, "testimages", "testlabels", 1);
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
 						
 						for(int i = 0; i<class_nodes.size(); i++) {
-							guess = Num_Classifier.classify(class_nodes.get(i).getData());
+							guess = Num_Classifier.classify(class_nodes.get(i).getData(), lRate);
 							if(guess == class_nodes.get(i).getLabel()) {
 								corr++;
 								tots++;
@@ -133,6 +147,40 @@ public class core {
 						
 						break;
 					case 1://faces
+						try {
+							training_nodes = Parser2.trainParse(classifier_type, imgFile, labFile, 0);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+							return;
+						}
+						Face_Classifier.face_train(training_nodes, train_per, lRate);
+						
+						try {
+							val_nodes = Parser2.trainParse(classifier_type, "facedatavalidation", "facedatavalidationlabels", 1);
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+							return;
+						}
+						
+						Face_Classifier.val_check(val_nodes, lRate);
+						
+						ArrayList<Data_obj> face_nodes = null;
+						try {
+							 face_nodes = Parser2.trainParse(classifier_type, "facedatatest", "facedatatestlabels", 0);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+						
+						for(int i = 0; i<face_nodes.size(); i++) {
+							guess = Face_Classifier.classify(face_nodes.get(i).getData(), lRate);
+							if(guess == face_nodes.get(i).getLabel()) {
+								corr++;
+								tots++;
+							}
+							tots++;
+						}
+						
+						System.out.printf("Amount Predicted Correctly: %10.1f%%\n", ((corr/tots)*100));
 						break;
 				}
 				

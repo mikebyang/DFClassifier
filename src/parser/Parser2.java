@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class Parser {
+public class Parser2 {
 	//training file paths
 	private static String num_tpath = "./data/digitdata/";
 	private static String num_lpath = "./data/digitdata/";
@@ -45,7 +45,7 @@ public class Parser {
 		int num = 0;
 		
 		while(dsc.hasNext()) {
-			if(num == 27) {
+			if(num == 73) {
 				img_temp.add(dsc.nextLine());
 				data.add(new Data_obj(img_temp.toArray(new String[img_temp.size()])));
 				img_temp = new ArrayList<>();
@@ -56,8 +56,8 @@ public class Parser {
 			num++;
 		}
 		img_temp.add(dsc.nextLine());
-		for(int k = 0; k<28-img_temp.size(); k++) {
-			img_temp.add(String.format("%1$"+28+"s", " "));
+		for(int k = 0; k<60-img_temp.size(); k++) {
+			img_temp.add(String.format("%1$"+60+"s", " "));
 		}
 		data.add(new Data_obj(img_temp.toArray(new String[img_temp.size()])));
 		dsc.close();
@@ -83,5 +83,3 @@ public class Parser {
 		return data;
 	}
 }
-
-
