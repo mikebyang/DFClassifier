@@ -2,6 +2,7 @@ package perceptron;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class Num_Classifier {
 			
 			//use label as array index (0-9)
 			if(temp_arr[t_node.getLabel()] == null) {
-				temp_arr[t_node.getLabel()] = new Perceptron_node(t_node.getData());
+				temp_arr[t_node.getLabel()] = new Perceptron_node(t_node.getData(), lRate);
 			}
 			else {
 				try {
@@ -40,4 +41,28 @@ public class Num_Classifier {
 		num_arr = new ArrayList<Perceptron_node>(Arrays.asList(temp_arr));
 	}
 	
+	private static double matmul(Double [][] mat1,Double [][] mat2, Double tot) {
+		double total = 0.0;
+		if(mat1.length != mat2.length) {
+			System.exit(1);
+		}
+		
+		for(int i = 0; i < mat1.length; i++) {
+			for(int j = 0; j < mat1[0].length; j++) {
+				total += (mat1[i][j] + mat2[i][j]);
+			}
+		}
+		
+		return total/tot;
+	}
+	public static int classify(String [] image) {
+		Double [][] img = Perceptron_node.conv(image, 1);
+		List<Chance_node> t_arr = new ArrayList<Chance_node>(10);
+		for(int i = 0; i < num_arr.size(); i++) {
+			t_arr.add(
+					new Chance_node(
+							matmul(img, num_arr.get(i).getDat(), num_arr.get(i).getTot()), i));
+		}
+		return Collections.max(t_arr).getLabel();
+	}
 }

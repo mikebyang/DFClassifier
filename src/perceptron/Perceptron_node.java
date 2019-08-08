@@ -7,19 +7,23 @@ public class Perceptron_node {
 	private Double[][] arr;
 	private Double total = 0.0;
 	
-	public static Double[][] conv(String [] sarr){
+	public static Double[][] conv(String [] sarr, double lRate){
 		List<Double[]> outer = new ArrayList<Double[]>();
 		List<Double> inner = new ArrayList<Double>();
+		double rate =  0.5;
+		if(lRate == 1) {
+			rate = 1;
+		}
 		for(int i = 0; i < sarr.length; i++) {
 			for(int j = 0; j < sarr[0].length(); j++) {
 				if(sarr[i].charAt(j) == ' ') {
 					inner.add(0.0);
 				}
 				else if(sarr[i].charAt(j) == '+') {
-					inner.add(0.5);
+					inner.add(rate*lRate);
 				}
 				else if(sarr[i].charAt(j) == '#') {
-					inner.add(1.0);
+					inner.add(1.0*lRate);
 				}
 			}
 			outer.add(inner.toArray(new Double[inner.size()]));
@@ -56,8 +60,8 @@ public class Perceptron_node {
 		}
 	}
 	
-	public Perceptron_node(String[] sarr) {
-		this.arr = conv(sarr);
+	public Perceptron_node(String[] sarr, double lRate) {
+		this.arr = conv(sarr, lRate);
 	}
 	public void setTot() {
 		for(int i = 0; i < this.arr.length; i++) {
@@ -68,5 +72,8 @@ public class Perceptron_node {
 	}
 	public Double getTot() {
 		return this.total;
+	}
+	public Double[][] getDat(){
+		return this.arr;
 	}
 }

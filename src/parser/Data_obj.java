@@ -14,8 +14,7 @@ public class Data_obj {
 	private int width;
 	private int height;
 	
-	public Data_obj(int label, String [] image) {
-		this.label = label;
+	public Data_obj(String [] image) {
 		this.image = image;
 		this.width = image[0].length();
 		this.height = image.length;
@@ -28,6 +27,9 @@ public class Data_obj {
 //	}
 	
 	
+	public void addLab(int label) {
+		this.label = label;
+	}
 	public void modHeight(int hmod, int extra, int maxw, int maxh) {
 		ArrayList<String> arr =new ArrayList<>(Arrays.asList(this.image));
 		String wspace = String.format("%1$"+maxw+"s", " ");

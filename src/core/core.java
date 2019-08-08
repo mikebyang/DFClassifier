@@ -3,6 +3,8 @@ package core;
 import parser.Data_obj;
 import parser.Parser;
 import perceptron.Num_Classifier;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,10 +106,31 @@ public class core {
 					e.printStackTrace();
 					return;
 				}
+				int corr = 0;
+				int tots = 0;
+				int guess = -1;
 				
 				switch(classifier_type) {
 					case 0://digits
 						Num_Classifier.num_train(training_nodes, train_per, lRate);
+						ArrayList<Data_obj> class_nodes = null;
+						try {
+							 class_nodes = Parser.trainParse(classifier_type, "testimages", "testlabels", 0);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+						
+						for(int i = 0; i<class_nodes.size(); i++) {
+							guess = Num_Classifier.classify(class_nodes.get(i).getData());
+							if(guess == class_nodes.get(i).getLabel()) {
+								corr++;
+								tots++;
+							}
+							tots++;
+						}
+						
+						System.out.println((double)((corr/tots)*100));
+						
 						break;
 					case 1://faces
 						break;

@@ -71,6 +71,7 @@ public class Parser {
 		 */
 		
 		//Array with all the training data objects
+//		int count = 0;
 		ArrayList<Data_obj> data = new ArrayList<Data_obj>();
 		String training_fil = "";
 		String training_lfil = "";
@@ -88,33 +89,56 @@ public class Parser {
 		//data scanner
 		Scanner dsc = new Scanner(new File(training_fil));
 		//label scanner
-		Scanner lsc = new Scanner(new File(training_lfil));
+//		Scanner lsc = new Scanner(new File(training_lfil));
 		
 		String img_part = "";
 		List<String> img_temp = new ArrayList<String>();
 		
+//		boolean dup = false;
 //		switch(mode) {
 //			case 0:
-		while(dsc.hasNext() && lsc.hasNext()) {
-			if(isBlank(img_part = dsc.nextLine()) && img_temp.isEmpty()) {
+		int num = 0;
+		
+		while(dsc.hasNext()) {
+			img_part = dsc.nextLine();
+			num++;
+			if(isBlank(img_part) && img_temp.isEmpty()) {
+//				dup = false;
 				continue;
 			}
-			else if(isBlank(img_part) && !img_temp.isEmpty()) {
-				data.add(new Data_obj(Integer.parseInt(lsc.nextLine()), img_temp.toArray(new String[img_temp.size()])));
+			else if(num == 28) {
+				
+//				if(dup) {
+//					System.out.println(count);
+//					System.exit(1);
+//				}
+				
+//				count++;
+				
+				data.add(new Data_obj(img_temp.toArray(new String[img_temp.size()])));
 				if(mode == 0) {
-					maxh = img_temp.size();
+					if(img_temp.size() > maxh) {
+						maxh = img_temp.size();
+					}
 				}
 				img_temp = new ArrayList<>();
+//				dup = true;
+				num = 0;
 				continue;
 			}
 			else {
 				img_temp.add(img_part);
 				if(mode == 0) {
-					maxw = img_part.length();
+					if(img_part.length() > maxw) {
+						maxw = img_part.length();
+					}
 				}
 				continue;
 			}
 		}
+		data.add(new Data_obj(img_temp.toArray(new String[img_temp.size()])));
+//		System.out.println(count);
+//		count = 0;
 		data = normalize(data.toArray(new Data_obj[data.size()]));
 //				break;
 //			case 1:
@@ -139,7 +163,31 @@ public class Parser {
 //		}
 		
 		dsc.close();
-		lsc.close();
+//		lsc.close();
+		
+		Data_obj[] temp_arr = data.toArray(new Data_obj[data.size()]);
+		
+		dsc = new Scanner(new File(training_lfil));
+		try {
+			for(int i = 0; i < temp_arr.length; i++) {
+				if(!dsc.hasNext()) {
+					dsc.close();
+					throw new Exception();
+				}
+				temp_arr[i].addLab(Integer.parseInt(dsc.nextLine()));
+//				count++;
+			}
+		}
+		catch(Exception e) {
+//			System.out.println(count);
+			
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		dsc.close();
+		
+		data =  new ArrayList<Data_obj>(Arrays.asList(temp_arr));
 		
 		return data;
 	}
