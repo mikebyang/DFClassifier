@@ -38,10 +38,6 @@ public class Perceptron_node {
 		for(int i = 0; i < a.length; i++) {
 			for(int j = 0; j < a[i].length(); j++) {
 				if(a[i].charAt(j) == ' ') {
-//					System.out.println("strh" + a.length);
-//					System.out.println("strw" + a[i].length());
-//					System.out.println("doubleh" + this.arr.length);
-//					System.out.println("doublew" + this.arr[i].length);
 					this.arr[i][j] += 0.0;
 				}
 				else if(a[i].charAt(j) == '+') {

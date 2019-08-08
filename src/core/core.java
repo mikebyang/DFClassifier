@@ -106,8 +106,8 @@ public class core {
 					e.printStackTrace();
 					return;
 				}
-				int corr = 0;
-				int tots = 0;
+				double corr = 0.0;
+				double tots = 0.0;
 				int guess = -1;
 				
 				switch(classifier_type) {
@@ -129,7 +129,7 @@ public class core {
 							tots++;
 						}
 						
-						System.out.println((double)((corr/tots)*100));
+						System.out.printf("Amount Predicted Correctly: %10.1f%%\n", ((corr/tots)*100));
 						
 						break;
 					case 1://faces

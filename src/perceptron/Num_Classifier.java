@@ -12,7 +12,9 @@ public class Num_Classifier {
 	private static List<Perceptron_node> num_arr = new ArrayList<Perceptron_node>(10);
 	
 	public static void num_train(ArrayList<Data_obj> data_arr, double train_per, double lRate) {
+		//amount of training set to be used
 		int train_size = (int) (data_arr.size() * train_per/100);
+		//training imgs are to be randomly selected
 		Random rand = new Random();
 		int rdm_index = -1;
 		Data_obj t_node = null;
@@ -49,7 +51,7 @@ public class Num_Classifier {
 		
 		for(int i = 0; i < mat1.length; i++) {
 			for(int j = 0; j < mat1[0].length; j++) {
-				total += (mat1[i][j] + mat2[i][j]);
+				total += (mat1[i][j] * mat2[i][j]);
 			}
 		}
 		
