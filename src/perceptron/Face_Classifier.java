@@ -64,7 +64,7 @@ private static List<Perceptron_node> f_arr = new ArrayList<Perceptron_node>(2);
 	public static int classify(String [] image, double lRate) {
 		Double [][] img = Perceptron_node.conv(image, 1);
 		List<Chance_node> t_arr = new ArrayList<Chance_node>(10);
-		for(int i = 0; i < f_arr.size(); i++) {
+		for(int i = 0; i < 2; i++) {
 			t_arr.add(
 					new Chance_node(
 							matmul(img, f_arr.get(i).getDat(), Perceptron_node.setTot(img)), i));

@@ -45,7 +45,7 @@ public class Parser2 {
 		int num = 0;
 		
 		while(dsc.hasNext()) {
-			if(num == 73) {
+			if(num == 69) {
 				img_temp.add(dsc.nextLine());
 				data.add(new Data_obj(img_temp.toArray(new String[img_temp.size()])));
 				img_temp = new ArrayList<>();

@@ -105,15 +105,19 @@ public class core {
 				double corr = 0.0;
 				double tots = 0.0;
 				int guess = -1;
-				
+				long start_t, end_t;
 				switch(classifier_type) {
 					case 0://digits
+						start_t = System.nanoTime();
 						try {
 							training_nodes = Parser.trainParse(classifier_type, imgFile, labFile, 0);
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 							return;
 						}
+						end_t = System.nanoTime();
+						
+						System.out.println((end_t-start_t)/1000000);
 						
 						Num_Classifier.num_train(training_nodes, train_per, lRate);
 						
@@ -153,8 +157,11 @@ public class core {
 							e.printStackTrace();
 							return;
 						}
+						start_t = System.nanoTime();
 						Face_Classifier.face_train(training_nodes, train_per, lRate);
+						end_t = System.nanoTime();
 						
+						System.out.println((end_t-start_t)/1000000);
 						try {
 							val_nodes = Parser2.trainParse(classifier_type, "facedatavalidation", "facedatavalidationlabels", 1);
 						} catch (FileNotFoundException e1) {
