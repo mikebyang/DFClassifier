@@ -2,6 +2,6 @@
 <br/>
 Created for Rutgers CS 440 Introduction to Artificial Intelligence
 <br/> 
-Objective: Create image classifier using the Naive Bayes algorithm and Single Layer Perceptron algoritm
+<br/>Objective: Create image classifier using the Naive Bayes algorithm and Single Layer Perceptron algoritm
 <br/>
 <br/>Collaborators: Michael Yang, Timothy Reilly
