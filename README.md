@@ -1,4 +1,4 @@
-# Face and Digit Classifier
+# Digit and Face Classifier
 Created for Rutgers CS 440 Introduction to Artificial Intelligence
 <br/> 
 <br/>Objective: Create image classifier using the Naive Bayes algorithm and Single Layer Perceptron algoritm
